@@ -61,8 +61,8 @@ public class TabFramePanel extends JPanel implements MouseListener, MouseMotionL
             TabFrameItemPanel itemContent = item.getTabFrameItemPanel();
 
             // 给内容组件添加鼠标拖拽改变大小事件
-            itemContent.addMouseListener(this);
-            itemContent.addMouseMotionListener(this);
+            itemContent.getHeaderPanel().addMouseListener(this);
+            itemContent.getHeaderPanel().addMouseMotionListener(this);
 
             // 添加缩小按钮点击事件，上班使用addActionListener这里才可以使用doClick()。
             itemContent.getMinimizeButton().addActionListener(e -> itemButton.doClick());
@@ -110,7 +110,7 @@ public class TabFramePanel extends JPanel implements MouseListener, MouseMotionL
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        ((TabFrameItemPanel) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+        ((JPanel) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
     }
 
     @Override
