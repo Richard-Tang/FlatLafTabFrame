@@ -25,7 +25,13 @@ public class TabFrameBar extends JPanel {
      * @param barItems 需要添加到ToolBar中的按钮
      */
     public TabFrameBar(JToggleButton... barItems) {
-        initializeToolBar(barItems);
+        toolBar.setRollover(true);
+        toolBar.setFloatable(false);
+        toolBar.setBorder(new MLineBorder(-1, false, false, false, false));
+
+        for (JToggleButton barItem : barItems) {
+            addBarItem(barItem);
+        }
 
         setLayout(new BorderLayout());
         add(toolBar, BorderLayout.WEST);
@@ -33,22 +39,15 @@ public class TabFrameBar extends JPanel {
     }
 
     /**
-     * 初始化ToolBar，主要将用户自定义的ToggleButton添加到ToolBar中，以及定义一些样式。
+     * 向TabFrameBar中的toolBar添加按钮
      *
-     * @param barItems 用户自定义按钮
+     * @param barItem 需要添加的item按钮
      */
-    private void initializeToolBar(JToggleButton... barItems) {
-        toolBar.setRollover(true);
-        toolBar.setFloatable(false);
-        toolBar.setBorder(new MLineBorder(-1, false, false, false, false));
-
-        // 将用户自定义的按钮添加到ToolBar上
-        for (JToggleButton item : barItems) {
-            item.setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
-            item.setBorder(new EmptyBorder(UIScale.scale(4), UIScale.scale(10), UIScale.scale(4), UIScale.scale(10)));
-            toolBar.add(item);
-            this.toolBarItems.add(item);
-        }
+    public void addBarItem(JToggleButton barItem) {
+        barItem.setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
+        barItem.setBorder(new EmptyBorder(UIScale.scale(4), UIScale.scale(10), UIScale.scale(4), UIScale.scale(10)));
+        toolBar.add(barItem);
+        this.toolBarItems.add(barItem);
     }
 
     /**

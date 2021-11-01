@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
 
 /**
  * TabFrame功能的主面板，组合Content和Bar两块的内容。
@@ -43,57 +42,57 @@ public class TabFramePanel extends JPanel implements MouseListener, MouseMotionL
      */
     public TabFramePanel(TabFrameItem... tabFrameItems) {
         this.tabFrameItems = tabFrameItems;
-        initializeTabFrameBar();
-
+        this.tabFrameBar   = new TabFrameBar();
+        for (TabFrameItem item : tabFrameItems) {
+            addTabFrameItem(item);
+        }
         setLayout(new BorderLayout());
         add(contentPanel, BorderLayout.CENTER);
         add(tabFrameBar, BorderLayout.SOUTH);
     }
 
     /**
-     * 初始化ToolBar
+     * 添加TabFrameItem
+     *
+     * @param tabFrameItem 用于显示具体内容的Item实体
      */
-    private void initializeTabFrameBar() {
-        ArrayList<JToggleButton> barItems = new ArrayList<>();
-        for (TabFrameItem item : tabFrameItems) {
-            // 取到ToolBar上的按钮和按钮对应的Content
-            JToggleButton     itemButton  = item.getToolBarItemBtn();
-            TabFrameItemPanel itemContent = item.getTabFrameItemPanel();
+    public void addTabFrameItem(TabFrameItem tabFrameItem) {
+        // 取到ToolBar上的按钮和按钮对应的Content
+        JToggleButton     itemButton  = tabFrameItem.getToolBarItemBtn();
+        TabFrameItemPanel itemContent = tabFrameItem.getTabFrameItemPanel();
 
-            // 给内容组件添加鼠标拖拽改变大小事件
-            itemContent.getHeaderPanel().addMouseListener(this);
-            itemContent.getHeaderPanel().addMouseMotionListener(this);
+        // 给内容组件添加鼠标拖拽改变大小事件
+        itemContent.getHeaderPanel().addMouseListener(this);
+        itemContent.getHeaderPanel().addMouseMotionListener(this);
 
-            // 添加缩小按钮点击事件，上班使用addActionListener这里才可以使用doClick()。
-            itemContent.getMinimizeButton().addActionListener(e -> itemButton.doClick());
+        // 添加缩小按钮点击事件，上班使用addActionListener这里才可以使用doClick()。
+        itemContent.getMinimizeButton().addActionListener(e -> itemButton.doClick());
 
-            // 点击TabFrameItem面板时的隐藏和显示事件
-            itemButton.addActionListener(e -> {
-                // 清空ToolBar中的按钮状态，不清空当前触发事件的按钮。
-                for (JToggleButton btn : tabFrameBar.getToolBarItems()) {
-                    if (btn != itemButton) {
-                        btn.setSelected(false);
-                    }
+        // 点击TabFrameItem面板时的隐藏和显示事件
+        itemButton.addActionListener(e -> {
+            // 清空ToolBar中的按钮状态，不清空当前触发事件的按钮。
+            for (JToggleButton btn : tabFrameBar.getToolBarItems()) {
+                if (btn != itemButton) {
+                    btn.setSelected(false);
                 }
+            }
 
-                // 因为多个TabFrameItem的原因，需要清空之前显示的内容。
-                contentPanel.removeAll();
-                contentPanel.add(itemContent);
+            // 因为多个TabFrameItem的原因，需要清空之前显示的内容。
+            contentPanel.removeAll();
+            contentPanel.add(itemContent);
 
-                // 内容面板显示和隐藏实现
-                if (itemButton.isSelected()) {
-                    contentPanel.setVisible(true);
-                    setPreferredSize(tempDimension);
-                } else {
-                    tempDimension = getSize();
-                    contentPanel.setVisible(false);
-                    setPreferredSize(new Dimension(tempDimension.width, itemButton.getHeight()));
-                }
-                updateUI();
-            });
-            barItems.add(itemButton);
-        }
-        tabFrameBar = new TabFrameBar(barItems.toArray(new JToggleButton[0]));
+            // 内容面板显示和隐藏实现
+            if (itemButton.isSelected()) {
+                contentPanel.setVisible(true);
+                setPreferredSize(tempDimension);
+            } else {
+                tempDimension = getSize();
+                contentPanel.setVisible(false);
+                setPreferredSize(new Dimension(tempDimension.width, itemButton.getHeight()));
+            }
+            updateUI();
+        });
+        tabFrameBar.addBarItem(itemButton);
     }
 
     @Override
