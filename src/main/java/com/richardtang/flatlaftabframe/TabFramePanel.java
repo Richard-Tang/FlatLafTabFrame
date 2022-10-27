@@ -42,7 +42,7 @@ public class TabFramePanel extends JPanel implements MouseListener, MouseMotionL
      */
     public TabFramePanel(TabFrameItem... tabFrameItems) {
         this.tabFrameItems = tabFrameItems;
-        this.tabFrameBar   = new TabFrameBar();
+        this.tabFrameBar = new TabFrameBar();
         for (TabFrameItem item : tabFrameItems) {
             addTabFrameItem(item);
         }
@@ -58,7 +58,7 @@ public class TabFramePanel extends JPanel implements MouseListener, MouseMotionL
      */
     public void addTabFrameItem(TabFrameItem tabFrameItem) {
         // 取到ToolBar上的按钮和按钮对应的Content
-        JToggleButton     itemButton  = tabFrameItem.getToolBarItemBtn();
+        JToggleButton itemButton = tabFrameItem.getToolBarItemBtn();
         TabFrameItemPanel itemContent = tabFrameItem.getTabFrameItemPanel();
 
         // 给内容组件添加鼠标拖拽改变大小事件
@@ -93,6 +93,15 @@ public class TabFramePanel extends JPanel implements MouseListener, MouseMotionL
             updateUI();
         });
         tabFrameBar.addBarItem(itemButton);
+    }
+
+    /**
+     * 获取TabFrameBar
+     *
+     * @return {@link TabFrameBar}
+     */
+    public TabFrameBar getTabFrameBar() {
+        return this.tabFrameBar;
     }
 
     @Override
